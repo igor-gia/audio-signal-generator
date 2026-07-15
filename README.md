@@ -215,7 +215,7 @@
 - **Ko-fi**: [Donate on Ko-fi](https://ko-fi.com/igorgimelfarb)  
 - **Monobank**: Отсканируйте QR-код или воспользуйтесь ссылкой: [Поддержать через Monobank](https://send.monobank.ua/jar/8HG6A3VPaW)
 
-![Поддержать через Monobank](img/monobank_DIY_QR.png)
+![Поддержать через Monobank](images/monobank_DIY_QR.png)
 
 **Ваша поддержка будет очень ценной!**
 
