@@ -1,6 +1,7 @@
 # AGP-S3: Dual-Channel Audio Generator & SD Player
 
 [English](#English) | [Українська](#Ukrainian) | [русский](#russian)
+
 ---
 
 ## English
@@ -237,6 +238,7 @@ This project is licensed under the **MIT License**. You are free to use, modify,
 ---
 
 [English](#English) | [Українська](#Ukrainian) | [русский](#russian)
+
 ---
 
 ## Ukrainian
@@ -471,6 +473,7 @@ This project is licensed under the **MIT License**. You are free to use, modify,
 *Автор проєкту: Гімельфарб Ігор (2026 р.)*
 
 [English](#English) | [Українська](#Ukrainian) | [русский](#russian)
+
 ---
 
 ## russian
