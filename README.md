@@ -1,6 +1,10 @@
-## English
-
 # AGP-S3: Dual-Channel Audio Generator & SD Player
+
+[English](#English) | [русский](#russian)
+
+---
+
+## English
 
 **AGP-S3** is a compact dual-channel low-frequency DDS signal generator and a high-quality audio player (Hi-Res Audio). The device is built on the powerful dual-core **ESP32-S3** microcontroller and a dedicated stereo DAC **PCM5102A** (192 kHz / 24-bit).
 
@@ -231,7 +235,14 @@ This project is licensed under the **MIT License**. You are free to use, modify,
 ---
 *Project Author: Igor Gimelfarb (2026)*
 
+---
+
+[English](#English) | [русский](#russian)
+
+---
+
 ## russian
+
 # AGP-S3: Dual-Channel Audio Generator & SD Player
 
 **AGP-S3** — это компактный двухканальный низкочастотный DDS-генератор сигналов и высококачественный аудиопроигрыватель (Hi-Res Audio). Устройство построено на базе мощного двухъядерного микроконтроллера **ESP32-S3** и выделенного стерео-ЦАП **PCM5102A** (192 кГц / 24 бит).
