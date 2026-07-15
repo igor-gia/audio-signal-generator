@@ -237,6 +237,11 @@ This project is licensed under the **MIT License**. You are free to use, modify,
 
 ---
 
+###### Tags / Keywords: 
+`esp32s3 audio generator`, `DDS signal generator DIY`, `PCM5102A I2S DAC`, `hi-res lossless player ESP32`, `audio testing tool`, `phase rotation generator`, `pink noise generator DIY`, `IMD test signal`, `BTL amplifier tuning`, `KiCad audio circuit`
+
+---
+
 [English](#English) | [Українська](#Ukrainian) | [русский](#russian)
 
 ---
@@ -471,6 +476,13 @@ This project is licensed under the **MIT License**. You are free to use, modify,
 
 ---
 *Автор проєкту: Гімельфарб Ігор (2026 р.)*
+
+---
+
+###### Теги / Ключові слова:
+`генератор звукових частот ESP32`, `DDS генератор синусу`, `ЦАП PCM5102A схема`, `аудіоплеєр на ESP32-S3`, `вимірювання спотворень підсилювача`, `генератор рожевого шуму`, `тестування мостових підсилювачів`, `радіоаматорські прилади DIY`
+
+---
 
 [English](#English) | [Українська](#Ukrainian) | [русский](#russian)
 
@@ -707,3 +719,8 @@ This project is licensed under the **MIT License**. You are free to use, modify,
 
 ---
 *Автор проекта: Гимельфарб Игорь (2026 г.)*
+
+---
+
+###### Теги / Ключевые слова:
+`генератор звуковых частот ESP32`, `DDS генератор синуса`, `ЦАП PCM5102A схема`, `аудиоплеер на ESP32-S3`, `измерение искажений усилителя`, `генератор розового шума`, `тестирование мостовых усилителей`, `радиолюбительские приборы DIY`
