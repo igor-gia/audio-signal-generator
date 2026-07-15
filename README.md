@@ -1,3 +1,237 @@
+## English
+
+# AGP-S3: Dual-Channel Audio Generator & SD Player
+
+**AGP-S3** is a compact dual-channel low-frequency DDS signal generator and a high-quality audio player (Hi-Res Audio). The device is built on the powerful dual-core **ESP32-S3** microcontroller and a dedicated stereo DAC **PCM5102A** (192 kHz / 24-bit).
+
+The instrument is designed for testing, tuning, and repairing various audio equipment: power amplifiers, acoustic systems, crossovers, equalizers, and other stages of the audio signal path.
+
+---
+
+## 📝 Author's Preface and Project Backstory
+
+The idea of creating this device was born out of a real practical challenge. While building a custom home media center (using an ESP32 and TPA3255) and assembling a custom 10-inch subwoofer based on an Alpine driver powered by a TPA3255 monoblock running in parallel bridge mode (PBTL), I faced an issue with tuning the audio system.
+
+I had a portable FNIRSI DSO-TC4 device on my bench, which combines both an oscilloscope and a signal generator. However, they share a common circuit ground. When tuning amplifiers operating in bridge mode (BTL/PBTL), it is physically impossible to simultaneously apply a test signal from the generator to the input and measure the output with the oscilloscope — doing so short-circuits one of the output phases to ground through the test equipment.
+
+Initially, I planned to build a simple, standalone sine wave generator out of whatever spare parts I had lying around. But since I had a powerful **ESP32-S3 (N16R8)** microcontroller on hand, the project quickly grew beyond a simple "tone generator".
+
+The result is a complete laboratory instrument that addresses two key scenarios:
+1. **Precise Tuning of Audio Equipment:** a dual-channel pure tone generator, phase shifter, and test noise source that is fully galvanically isolated from the oscilloscope.
+2. **High-Quality Audio Source (Hi-Res Player):** a standalone lossless audio player that can be used as a reference source when evaluating audio signal paths.
+
+Most DIY generators rely on the microcontroller's internal 8-bit DACs or PWM, which introduce immense distortion. The **AGP-S3** utilizes a dedicated **PCM5102A** stereo DAC connected via the I2S bus, ensuring a pristine analog output signal, while the processing power of the ESP32-S3 allows for instantaneous, real-time phase and frequency calculations.
+
+---
+
+## 🚀 Key Features
+
+* **Dual-Core Architecture:** Tasks are strictly split between the ESP32-S3 cores. Core 1 is fully dedicated to hardware sound generation over the I2S bus (ensuring zero jitter and playback stutters), while Core 0 handles the graphical user interface, button inputs, and SD card data reading.
+* **High-Quality Audio Output:** The dedicated PCM5102A DAC provides a clean analog signal with sampling rates up to 192 kHz and 24-bit resolution.
+* **Dual-Channel DDS Generator:** Frequency range from **1 Hz to 24,000 Hz** with adjustment steps down to **0.1 Hz**. Supported waveforms: *Sine* and *Square*.
+* **Flexible Phase Control:** Manual phase shift adjustment between channels from $0^{\circ}$ to $360^{\circ}$ (in $10^{\circ}$ steps), as well as an automatic continuous phase rotation mode at a user-defined speed.
+* **Test Noises & Special Signals:** Built-in White and Pink noise generators, plus a two-tone Intermodulation Distortion (IMD) test mode.
+* **Hi-Res Audio Player:** Read and play back **WAV, MP3, OGG, and FLAC** audio files directly from a MicroSD card (FAT32).
+* **Built-in Attenuator:** Features two pairs of analog RCA outputs — a direct output (0 dB) and an attenuated output (-20 dB) via a precision resistor divider for interfacing with sensitive, low-level inputs.
+* **Non-Volatile Memory:** Automatically saves all current settings and parameters to the ESP32-S3 flash memory upon powering off.
+
+---
+
+## 🛠 Technical Specifications
+
+| Parameter | Value |
+| :--- | :--- |
+| **Microcontroller** | ESP32-S3-WROOM-1 (N16R8) |
+| **DAC** | Texas Instruments PCM5102A (I2S) |
+| **Resolution / Sample Rate** | 24-bit / up to 192 kHz |
+| **Generator Frequency Range** | 1 Hz – 24,000 Hz |
+| **Frequency Adjustment Step** | 0.1 Hz / 1 Hz / 10 Hz / 100 Hz / 1000 Hz |
+| **Waveforms** | Sine, Square (Meander) |
+| **Phase Adjustment** | $0^{\circ} - 360^{\circ}$ ($10^{\circ}$ step) + auto-rotation mode |
+| **Noise Modes** | White Noise, Pink Noise, IMD (two-tone test) |
+| **Supported Card Formats** | MicroSD, FAT32 (up to 32 GB) |
+| **Supported Audio Formats** | MP3, WAV, FLAC, OGG |
+| **Display** | OLED 0.96" (SSD1306, I2C, 128x64) |
+| **Power Supply** | USB Type-C (5V) |
+
+---
+
+## 📦 Bill of Materials (BOM)
+
+To build this device, you will need the following main components:
+
+| Component | Description / Module | Qty |
+| :--- | :--- | :--- |
+| **Microcontroller** | ESP32-S3-DevKitC-1-N16R8V (or compatible board with 16MB Flash and 8MB PSRAM) | 1 pc. |
+| **DAC** | PCM5102A DAC Module (popular blue board with I2S interface) | 1 pc. |
+| **Display** | OLED 0.96" 128x64 Module (SSD1306 driver, I2C interface) | 1 pc. |
+| **Encoder** | EC11 incremental encoder with integrated push-button | 1 pc. |
+| **Buttons** | Tactile push-buttons (12x12x7.5 mm) | 5 pcs. |
+| **Card Reader** | MicroSD slot (TF-Card) wired for SD_MMC mode | 1 pc. |
+| **Output Connectors** | Chassis-mount RCA jacks (for audio outputs) | 4 pcs. |
+| **Power Connector** | Chassis-mount USB Type-C female breakout (for 5V power supply) | 1 pc. |
+| **Passives** | Resistors and capacitors for filtering and attenuation (per schematic) | 1 set |
+
+---
+
+## 📂 Repository Structure
+
+```text
+├── hardware/                 # Schematics and PCB layout
+│    ├── kicad_project/       # Original project files in KiCad
+│    ├── scheme_v2.pdf        # Complete schematic diagram in vector PDF format
+│    └── scheme.png           # Schematic image for quick preview
+├── src/                      # Source code for Arduino IDE (.ino)
+├── docs/                     # Documentation and manuals
+│    └── User manual.pdf      # Complete User Manual (in Russian)
+├── images/                   # Photos and project media files
+├── LICENSE                   # MIT License
+└── README.md                 # Project overview (this file)
+```
+---
+
+## 🔌 Hardware & Pinout
+
+The complete schematic diagram of the device is available in the [`hardware/scheme_v2.pdf`](hardware/scheme_v2.pdf) file.
+
+![Schematic Diagram](hardware/scheme.png)
+
+All controls (buttons and encoder) are wired as follows: **button pin to GPIO, second pin to GND** (the firmware utilizes the internal pull-up mode: `INPUT_PULLUP`).
+
+### ESP32-S3 Pin Mapping Table:
+
+| GPIO | Function | Constant in `Config.h` / Settings |
+| :--- | :--- | :--- |
+| **GPIO 1** | 5V Power Detector (5V detected) | |
+| **GPIO 2** | BCLK (PCM5102A DAC) | `BCLK_PIN` |
+| **GPIO 4** | Tactile button "WAVE" | `PIN_BTN_5` |
+| **GPIO 5** | Tactile button "RIGHT CH" | `PIN_BTN_3` |
+| **GPIO 6** | Encoder Button (Enc Btn) | `PIN_ENC_BTN` |
+| **GPIO 7** | Encoder Direction A (Enc+) | `PIN_ENC_A` |
+| **GPIO 13**| Tactile button "LEFT CH" | `PIN_BTN_2` |
+| **GPIO 14**| Tactile button "MODE" | `PIN_BTN_4` |
+| **GPIO 15**| Encoder Direction B (Enc-) | `PIN_ENC_B` |
+| **GPIO 16**| Tactile button "BOTH CH" | `PIN_BTN_1` |
+| **GPIO 21**| TF-Card CMD (SD_MMC class) | `SD_MMC_CMD` |
+| **GPIO 39**| SCL (SSD1306 Display) | `SCL_PIN` |
+| **GPIO 40**| SDA (SSD1306 Display) | `SDA_PIN` |
+| **GPIO 41**| LRCK / WS (PCM5102A DAC) | `LRCK_PIN` |
+| **GPIO 42**| DIN / DOUT (PCM5102A DAC) | `DIN_PIN` |
+| **GPIO 47**| TF-Card CLK (SD_MMC class) | `SD_MMC_CLK` |
+| **GPIO 48**| TF-Card D0 (SD_MMC class) | `SD_MMC_D0` |
+
+---
+
+## 💻 Environment Setup & Flashing
+
+To compile and upload the firmware to the ESP32-S3 via the development board's USB port, configure the following settings in the **Arduino IDE**:
+
+* **Board:** `ESP32S3 Dev Module`
+* **Port:** Select the COM port of your connected device
+* **USB CDC On Boot:** `Enabled` (for debugging output in the Serial Monitor)
+* **CPU Frequency:** `240MHz (WiFi/BT)`
+* **Core Debug Level:** `None`
+* **USB DFU On Boot:** `Disabled`
+* **Erase All Flash Before Sketch Upload:** `Disabled`
+* **Arduino Runs On:** `Core 0`
+* **Events Run On:** `Core 1`
+* **Flash Frequency:** `80MHz`
+* **Flash Mode:** `QIO 80MHz`
+* **Flash Size:** `16MB (128Mb)`
+* **JTAG Adapter:** `Integrated USB JTAG`
+* **Partition Scheme:** `16M Flash (3MB APP/9.9MB FATFS)`
+* **PSRAM:** `OPI PSRAM`
+* **Upload Mode:** `UART0 / Hardware CDC`
+* **Upload Speed:** `921600`
+
+---
+
+## 🎮 Device Control (Quick Start)
+
+![AGP-S3 Controls](images/main%20view.png)
+
+### 1. Main Menu Navigation (Mode Selection)
+
+When powering on the device (or when returning to the Main Menu), the screen displays a list of available modes.
+
+* **Mode Selection (Moving the Highlight):** Done using the **[LEFT]** and **[RIGHT]** buttons or by **turning the encoder knob**. The selected mode will be highlighted on the screen.
+* **Entering the Selected Mode:** Press the **[BOTH]** button to confirm and enter the highlighted mode.
+* **Quick Return to the Main Menu:** You can return to the Main Menu from any active operating mode by **holding down the [MODE] button**.
+
+---
+
+### 2. Setting the Frequency (in Generator Modes):
+
+The process for precise frequency tuning is designed as follows:
+1. **Enter Frequency Edit Mode:** Press and **hold** any of the channel selection buttons — **[LEFT]**, **[BOTH]**, or **[RIGHT]**.
+2. **Shift Between Digits:** To select which digit to change (indicated by the underline cursor on the screen), press the **[LEFT]** button (shifts left / increases the digit weight) or the **[RIGHT]** button (shifts right / decreases the digit weight).
+3. **Change the Digit Value:** Rotate the encoder knob to increase or decrease the value of the selected digit.
+4. **Exit Frequency Edit Mode:** Press the **[BOTH]** button to apply the changes and return to the normal display state.
+
+---
+
+### 3. Operating Modes:
+
+#### 📺 SCREEN 1. Waves Generator
+Allows independent or combined configuration of the left and right channels:
+* The **[WAVE]** button cyclically changes the waveform: **Sine** or **Square**.
+* In the right channel view (RIGHT), you can manually set a phase shift relative to the left channel from 0° to 360° (in 10° steps), or activate the automatic phase rotation mode with speeds ranging from 1°/sec to 360°/sec.
+
+#### 📺 SCREEN 2. Noises & Tests
+Generates uncorrelated test signals and noise. Toggle through the active signal type with a short press of any button: [Left], [Both], [Right], or [Wave]:
+* **White Noise:** Uniform spectral power density across the entire frequency range.
+* **Pink Noise:** Spectral power density rolls off at 3 dB per octave.
+* **IMD (Intermodulation Distortion Test):** A two-tone signal used to evaluate intermodulation distortion ($f_1$ and $f_2$ mixed in user-defined amplitude proportions).
+
+#### 📺 SCREEN 3. MP3 Player
+Plays Hi-Res audio files (WAV, MP3, OGG, FLAC) from a MicroSD card (FAT32).
+* Supports repeat options: repeat all files in the current folder (`Folder`) or loop the active track (`Repeat`).
+* Player controls:
+  * **[LEFT]** — Previous track / rewind.
+  * **[RIGHT]** — Next track / fast forward.
+  * **[BOTH]** — Start / Stop playback.
+  * **[Wave]** — Pause playback.
+
+#### 📺 SCREEN 4. Settings
+Navigate through the settings list by turning the encoder or by pressing the [LEFT] / [RIGHT] buttons.
+* To modify a setting, press the encoder knob **[Encoder]** (or the **[BOTH]** button). The selection cursor will highlight the parameter value.
+* Change the value by rotating the encoder knob.
+* Press the encoder knob or the **[BOTH]** button again to save the setting to the non-volatile memory.
+
+**Some of the menu parameters:**
+* `Phase Rot` (Phase Auto-rotation): Speed of rotation from 1°/sec to 360°/sec.
+* `IMD f1`, `IMD f2`: Target frequencies for the two-tone intermodulation test.
+* `IMD Amplit f1`, `IMD Amplit f2`: Amplitude mixing ratios (must sum to 1.0, e.g., 0.8 and 0.2).
+* `Player Mode`: Player repeat configuration (`Folder` / `Repeat`).
+* `Start Scr` (Startup Screen): Active screen upon booting the device (`Main`, `Waves`, `Noises`, `MP3`).
+
+---
+
+⚠️ **Important Note:** This "Quick Start" section covers only the basic controls and provides brief descriptions of the main features. The device offers a much wider range of capabilities. For a detailed guide on all operating modes, system configurations, and setup procedures, please refer to the official User Manual: [`docs/User manual.pdf`](docs/User%20manual.pdf) (currently available in Russian).
+
+---
+
+### Support
+If you find this project useful and want to support the author, you can make a donation using any of the following methods:
+
+- **PayPal**: [gia@gia.org.ua] [Donate via PayPal](https://www.paypal.me)  
+- **Ko-fi**: [Donate on Ko-fi](https://ko-fi.com/igorgimelfarb)  
+- **Monobank**: Scan the QR code or use the link: [Support via Monobank](https://send.monobank.ua/jar/8HG6A3VPaW)
+
+![Support via Monobank](images/monobank_DIY_QR.png)
+
+**Your support is highly appreciated!**
+
+---
+
+## ⚖️ License
+
+This project is licensed under the **MIT License**. You are free to use, modify, and distribute this project for both commercial and non-commercial purposes, provided that the original copyright notice and author attribution are retained. See the [LICENSE](LICENSE) file for details.
+
+---
+*Project Author: Igor Gimelfarb (2026)*
+
+## russian
 # AGP-S3: Dual-Channel Audio Generator & SD Player
 
 **AGP-S3** — это компактный двухканальный низкочастотный DDS-генератор сигналов и высококачественный аудиопроигрыватель (Hi-Res Audio). Устройство построено на базе мощного двухъядерного микроконтроллера **ESP32-S3** и выделенного стерео-ЦАП **PCM5102A** (192 кГц / 24 бит).
